@@ -24,7 +24,7 @@ def get_tick_emoji(condition):
 
 st.title('Pokédex')
 
-df = load_data('./data/silver.parquet')
+df = load_data('./data/gold.parquet')
 
 option = st.selectbox(
     'Select a Pokémon:',
@@ -44,7 +44,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     with st.container(border=True):
-        image_url = poke.sprites.get('other',{}).get('home',{}).get('front_default',None)
+        image_url = poke.sprite_default
         
         if(image_url):
             st.image(image_url)
@@ -58,9 +58,12 @@ with col1:
 with col2:
     #with st.container(border=True):
         with st.container(border=True):
-            f'**National Pokédex number**: {poke.species_id}'
             f'**Pokémon name:** {option.upper()}'
+            f'**Introduced in generation**: {poke.pokemon_generation_number}'
+        with st.container(border=True):
+            f'**National Pokédex number**: {poke.species_id}'
             f'**Species name:** {poke.species_name.upper()}'
+            f'**Species introduced in generation**: {poke.species_generation_number}'
         
         with st.container(border=True):
             # types
@@ -101,6 +104,7 @@ with col2:
             egg_group
 
             f'**Hatch time:** {poke.hatch_counter} cycles'
+            f'**Is baby:** {get_tick_emoji(poke.is_baby)}'
 
 with col3:
     #with st.container(border=True):
@@ -126,19 +130,19 @@ with col3:
             preevo = poke.evolves_from_species_name.upper() if poke.evolves_from_species_name else 'None'
             f'**Evolves from species:** {preevo}'
 
-            evolutions = str(poke.evolutions)[1:-1].upper().replace("'",'') if poke.evolutions.size>0 else 'None'
+            evolutions = (', '.join(poke.evolutions)).upper().replace("'",'') if poke.evolutions.size>0 else 'None'
             f'**Potential evolutions:** {evolutions}'
 
         with st.container(border=True):
-            is_mega = get_tick_emoji(poke.is_mega)
-            is_gmax = get_tick_emoji(poke.is_gmax)
-            has_mega = get_tick_emoji(poke.has_mega)
-            has_gmax = get_tick_emoji(poke.has_gmax)
+            f'**Is Mega-Evolved:** {get_tick_emoji(poke.is_mega)}'
+            f'**Is Gigantamax:** {get_tick_emoji(poke.is_gmax)}'
+        with st.container(border=True):
+            f'**Has Mega-Evolution:** {get_tick_emoji(poke.has_mega)}'
+            f'**Has Gigantamax:** {get_tick_emoji(poke.has_gmax)}'
 
-            f'**Is Mega-Evolved:** {is_mega}'
-            f'**Is Gigantamax:** {is_gmax}'
-            f'**Has Mega-Evolution:** {has_mega}'
-            f'**Has Gigantamax:** {is_gmax}'
+        with st.container(border=True):
+            f'**Is legendary:** {get_tick_emoji(poke.is_legendary)}'
+            f'**Is mythical:** {get_tick_emoji(poke.is_mythical)}'
 
 '\n'
 
@@ -211,5 +215,6 @@ with col2:
                 poke.moves_list
         with minicol2:
             with st.container(border=True):
-                st.markdown('#### Text entries')
-                poke.flavor_text_entries
+                ''
+                #st.markdown('#### Text entries')
+                #poke.flavor_text_entries
