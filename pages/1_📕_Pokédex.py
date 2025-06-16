@@ -123,7 +123,7 @@ with col3:
         with st.container(border=True):
             # experience
             f'**Base experience yield:** {poke.base_experience}'
-            f'**Leveling rate:** {poke.growth_rate_name.upper()}'
+            f'**Leveling rate:** {poke.growth_rate_name.upper().replace('-',' ')}'
 
         with st.container(border=True):
             # evolutions
@@ -152,7 +152,7 @@ col1, col2 = st.columns(2)
 with col1:
     # stats bar chart
     with st.container(border=True):
-        st.markdown('#### Stats base')
+        st.markdown('#### Base stats')
 
         stats = pd.DataFrame({
             'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],

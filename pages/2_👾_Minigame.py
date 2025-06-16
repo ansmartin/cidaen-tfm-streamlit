@@ -11,6 +11,7 @@ st.set_page_config(
 @st.cache_data
 def load_data(path):
     df = pd.read_parquet(path)
+    df = df[(df.is_default) | (df.is_mega) | (df.is_gmax)]
     return df
 
 
@@ -44,7 +45,7 @@ with col1:
 
     st.markdown(f'#### HINT 2. Color {poke.color_name.upper()}')
 
-    st.markdown(f'#### HINT 3. Name starts with the letter \"{poke.pokemon_name[0].upper()}\"')
+    st.markdown(f'#### HINT 3. Name starts with the letter {poke.pokemon_name[0].upper()}')
 
     hint4 = f'#### HINT 4. This Pokémon was introduced in generation {poke.pokemon_generation_number}'
     if not poke.is_default and poke.pokemon_generation_number>poke.species_generation_number:  

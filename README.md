@@ -13,5 +13,5 @@ A simple Streamlit app.
 2. Run the app
 
    ```
-   $ streamlit run main.py
+   $ streamlit run Main.py
    ```
