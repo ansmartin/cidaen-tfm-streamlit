@@ -45,11 +45,32 @@ col1, col2, col3 = st.columns(3)
 with col1:
     with st.container(border=True):
         image_url = poke.sprite_default
-        
+
         if(image_url):
-            st.image(image_url)
+            st.image(image_url, use_container_width=True)
         else:
             'Image not found'
+
+
+    minicol1, minicol2 = st.columns(2)
+    with minicol1:
+        with st.container(border=True, height=250):
+            f'**Varieties List:**'
+            poke.varieties_list
+
+    with minicol2:
+        with st.container(border=True, height=250):
+            f'**Forms List:**'
+            poke.forms_list
+            
+    # with st.container(border=True):
+    #     varieties = (', '.join(poke.varieties_list)).upper().replace("'",'') if poke.varieties_list.size>0 else 'None'
+    #     f'**Varieties:** {varieties}'
+
+    # with st.container(border=True):
+    #     forms = (', '.join(poke.forms_list)).upper().replace("'",'') if poke.forms_list.size>0 else 'None'
+    #     f'**Forms:** {forms}'
+
 
 
 # ------------------------------------------------------------
@@ -60,17 +81,22 @@ with col2:
         with st.container(border=True):
             f'**Pokémon name:** {option.upper()}'
             f'**Introduced in generation**: {poke.pokemon_generation_number}'
-        with st.container(border=True):
-            f'**National Pokédex number**: {poke.species_id}'
-            f'**Species name:** {poke.species_name.upper()}'
-            f'**Species introduced in generation**: {poke.species_generation_number}'
         
         with st.container(border=True):
             # types
-            typing = f'**Type:** {poke.first_type.upper()}'
-            if(poke.second_type):
-                typing += f' / {poke.second_type.upper()}' 
-            typing
+            # typing = f'**Type:** {poke.first_type.upper()}'
+            # if(poke.second_type):
+            #     typing += f' / {poke.second_type.upper()}' 
+            # typing
+            minicol1, minicol2, minicol3 = st.columns([1,2,2])
+            with minicol1:
+                '**Type:**'
+            with minicol2:
+                if(poke.first_type):
+                    st.image(f'./images/types/{poke.first_type}.png', use_container_width=True)
+            with minicol3:
+                if(poke.second_type):
+                    st.image(f'./images/types/{poke.second_type}.png', use_container_width=True)
 
         with st.container(border=True):
             # abilities
@@ -81,6 +107,10 @@ with col2:
 
             hidden_ability = poke.hidden_ability.upper() if poke.hidden_ability else 'None'
             f'**Hidden ability:** {hidden_ability}'
+
+        with st.container(border=True):
+            f'**Height:** {poke.height/10} m'
+            f'**Weight:** {poke.weight/10} kg'
 
         with st.container(border=True):
             f'**Catch rate value (between 0 and 255):** {poke.capture_rate}'
@@ -109,11 +139,11 @@ with col2:
 with col3:
     #with st.container(border=True):
         with st.container(border=True):
-            f'**Height:** {poke.height/10} m'
-            f'**Weight:** {poke.weight/10} kg'
-            f'**Shape:** {poke.shape_name.upper()}'
-
-            f'**Color:** {poke.color_name.upper()}'
+            f'**National Pokédex number**: {poke.species_id}'
+            f'**Species name:** {poke.species_name.upper()}'
+            f'**Species introduced in generation**: {poke.species_generation_number}'
+            f'**Species shape:** {poke.shape_name.upper()}'
+            f'**Species color:** {poke.color_name.upper()}'
             st.write(
                 f"""<div style="background-color: {poke.color_name}; border-radius: 10px; width: 20px; height: 20px; "> </div>""",
                 unsafe_allow_html=True
@@ -121,17 +151,16 @@ with col3:
             '\n'
 
         with st.container(border=True):
+            # evolutions
+            preevo = poke.evolves_from_pokemon_base_name.upper() if poke.evolves_from_pokemon_base_name else 'None'
+            f'**Evolves from:** {preevo}'
+            evolutions = (', '.join(poke.evolutions)).upper().replace("'",'') if poke.evolutions.size>0 else 'None'
+            f'**Evolutions:** {evolutions}'
+
+        with st.container(border=True):
             # experience
             f'**Base experience yield:** {poke.base_experience}'
             f'**Leveling rate:** {poke.growth_rate_name.upper().replace('-',' ')}'
-
-        with st.container(border=True):
-            # evolutions
-            preevo = poke.evolves_from_species_name.upper() if poke.evolves_from_species_name else 'None'
-            f'**Evolves from species:** {preevo}'
-
-            evolutions = (', '.join(poke.evolutions)).upper().replace("'",'') if poke.evolutions.size>0 else 'None'
-            f'**Potential evolutions:** {evolutions}'
 
         with st.container(border=True):
             f'**Is Mega-Evolved:** {get_tick_emoji(poke.is_mega)}'
@@ -189,22 +218,22 @@ with col1:
         minicol1, minicol2, minicol3, minicol4, minicol5, minicol6 = st.columns(6)
         with minicol1:
             'HP'
-            poke.stat_hp_effort
+            f'{poke.stat_hp_effort}'
         with minicol2:
             'Attack'
-            poke.stat_attack_effort
+            f'{poke.stat_attack_effort}'
         with minicol3:
             'Defense'
-            poke.stat_defense_effort
+            f'{poke.stat_defense_effort}'
         with minicol4:
             'SpAttack'
-            poke.stat_special_attack_effort
+            f'{poke.stat_special_attack_effort}'
         with minicol5:
             'SpDefense'
-            poke.stat_special_defense_effort
+            f'{poke.stat_special_defense_effort}'
         with minicol6:
             'Speed'
-            poke.stat_speed_effort
+            f'{poke.stat_speed_effort}'
 
 
 with col2:
