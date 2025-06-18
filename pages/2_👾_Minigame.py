@@ -11,7 +11,7 @@ st.set_page_config(
 @st.cache_data
 def load_data(path):
     df = pd.read_parquet(path)
-    df = df[(df.is_default) | (df.is_mega) | (df.is_gmax)]
+    df = df[(df.is_default) | (df.is_mega) | (df.is_gmax) | (df.is_regional)]
     return df
 
 
@@ -41,33 +41,33 @@ with col1:
     if(poke.second_type):
         typing += f' / {poke.second_type.upper()}' 
 
-    st.markdown(f'#### HINT 1. Type {typing}')
+    st.markdown(f'#### :grey[HINT 1:] Type {typing}')
 
-    st.markdown(f'#### HINT 2. Color {poke.color_name.upper()}')
+    st.markdown(f'#### :grey[HINT 2:] Species color {poke.color_name.upper()}')
 
-    st.markdown(f'#### HINT 3. Name starts with the letter {poke.pokemon_name[0].upper()}')
+    st.markdown(f'#### :grey[HINT 3:] Name starts with the letter {poke.pokemon_name[0].upper()}')
 
-    hint4 = f'#### HINT 4. This Pokémon was introduced in generation {poke.pokemon_generation_number}'
+    hint4 = f'#### :grey[HINT 4:] This Pokémon was introduced in generation {poke.pokemon_generation_number}'
     if not poke.is_default and poke.pokemon_generation_number>poke.species_generation_number:  
         hint4 += f', but the Pokémon species was introduced in generation {poke.species_generation_number}'
     
     st.markdown(hint4)
 
-    hint5 = '#### HINT 5. '
-    if(poke.evolves_from_species_name):
+    hint5 = '#### :grey[HINT 5:] '
+    if(poke.evolves_from_pokemon_base_name):
         hint5 += 'Has pre-evolution'
     else:
         hint5 += 'Does not have pre-evolution'
     st.markdown(hint5)
 
-    hint6 = '#### HINT 6. '
+    hint6 = '#### :grey[HINT 6:] '
     if(poke.evolutions.size>0):
         hint6 += 'Can evolve'
     else:
         hint6 += 'Cannot evolve'
     st.markdown(hint6)
 
-    # preevo = poke.evolves_from_species_name is not None
+    # preevo = poke.evolves_from_pokemon_base_name is not None
     # evolutions = poke.evolutions.size>0
 
     # if preevo and evolutions:
@@ -85,25 +85,28 @@ with col1:
     '\n'
 
     if poke.has_gender_differences:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon species has gender differences')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon species has gender differences')
     if poke.is_baby:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is considered baby')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is considered baby')
     if poke.is_legendary:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is considered legendary')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is considered legendary')
     if poke.is_mythical:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is considered mythical')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is considered mythical')
+    if poke.is_regional:
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is a regional form')
 
     if poke.is_mega:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is Mega-Evolved')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is Mega-Evolved')
     elif poke.is_gmax:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is Gigantamax')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is Gigantamax')
+
     elif not poke.is_default:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon is not considered the default within its own species')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon is not considered the default within its own species')
 
     if poke.has_mega:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon can Mega-Evolve')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon can Mega-Evolve')
     if poke.has_gmax:
-        st.markdown(f'#### ADDITIONAL HINT. This Pokémon can Gigantamax')
+        st.markdown(f'#### :grey[ADDITIONAL HINT:] This Pokémon can Gigantamax')
 
 
 with col2:
@@ -115,7 +118,7 @@ with col2:
 
         if option==poke.pokemon_name:
             '✅ Correct answer. You are an expert!'
-            f'The Pokémon\'s name is {option.upper()}'
+            f'The name of this Pokémon is {option.upper()}'
             image_url = poke.sprite_default
             if(image_url):
                 st.image(image_url, width=300)
