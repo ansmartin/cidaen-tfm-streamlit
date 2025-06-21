@@ -1,4 +1,4 @@
-# Pokémon
+# Pokédex
 
 A simple Streamlit app. 
 
