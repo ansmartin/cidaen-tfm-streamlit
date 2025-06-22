@@ -18,6 +18,11 @@ def load_data_varieties():
     df = pd.read_parquet('./data/pokemon-varieties.parquet')
     return df
 
+@st.cache_data
+def load_data_forms():
+    df = pd.read_parquet('./data/pokemon-forms.parquet')
+    return df
+
 def get_tick_emoji(condition):
     if condition:
         return '✅'
@@ -38,15 +43,20 @@ option = st.selectbox(
 
 #st.write('You selected:', option.upper())
 
-
+# get pokemon data
 poke = df[df.species_name==option].iloc[0]
+
+# get pokemon form data
+df_forms = load_data_forms()
+poke_form = df_forms[df_forms.pokemon_name==poke.pokemon_name].iloc[0]
 
 
 # ------------------------------------------------------------
 
 '---'
+# Pokémon name and category
 st.markdown(f'## {option.upper()}')
-f'{poke.genus_en}'
+f'{poke.genus}'
 '\n'
 
 col1, col2, col3 = st.columns(3)
@@ -63,16 +73,16 @@ with col1:
             'Image not found'
 
 
-    minicol1, minicol2 = st.columns(2)
-    with minicol1:
-        with st.container(border=True, height=250):
-            f'**Varieties List:**'
-            poke.varieties_list
+    # minicol1, minicol2 = st.columns(2)
+    # with minicol1:
+    #     with st.container(border=True, height=250):
+    #         f'**Varieties List:**'
+    #         poke.varieties_list
 
-    with minicol2:
-        with st.container(border=True, height=250):
-            f'**Forms List:**'
-            poke.forms_list
+    # with minicol2:
+    #     with st.container(border=True, height=250):
+    #         f'**Forms List:**'
+    #         poke.forms_list
 
 
 # ------------------------------------------------------------
@@ -83,7 +93,8 @@ with col2:
         with st.container(border=True):
             f'**National Pokédex number**: {poke.species_id}'
             f'**Introduced in generation**: {poke.species_generation_number}'
-            f'**Default form name:** {poke.pokemon_name.upper()}' #.replace('-',' ')
+            default_form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else poke.pokemon_name).upper()
+            f'**Default form name:** {default_form_name}'
         
         with st.container(border=True):
             # typing
@@ -99,10 +110,10 @@ with col2:
 
         with st.container(border=True):
             # abilities
-            abilities = f'**Abilities:** {poke.first_ability.upper().replace('-',' ')}'
+            abilities = f'{poke.first_ability.upper().replace('-',' ')}'
             if(poke.second_ability):
                 abilities += f' / {poke.second_ability.upper().replace('-',' ')}'
-            abilities
+            f'**Abilities:** {abilities}'
 
             hidden_ability = poke.hidden_ability.upper().replace('-',' ') if poke.hidden_ability else 'None'
             f'**Hidden ability:** {hidden_ability}'
@@ -121,9 +132,9 @@ with col2:
             else:
                 female_ratio = (gender_ratio * 10) * 1.25
                 male_ratio = 100 - female_ratio
+                # colors: blue, green, orange, red, violet.
                 f'**Gender ratio:** :blue[{male_ratio:.2f}% male] / :violet[{female_ratio:.2f}% female]'
             
-            # colors: blue, green, orange, red, violet.
             f'**Has gender differences:** {get_tick_emoji(poke.has_gender_differences)}'
 
         with st.container(border=True):
@@ -280,10 +291,86 @@ with col2:
 #         st.markdown('#### Move List')
 #         poke.moves_list
 
+'\n'
 
 # ------------------------------------------------------------
 
-# FORMS
+
+    
+# FORMS (forms_list)
+has_forms_in_list = len(poke.forms_list)>1
+
+if has_forms_in_list:
+
+    '---'
+
+    st.markdown(f'## Forms with minor changes (visual appearance changes or different types only)')
+
+    forms = poke.forms_list[1:]
+    option_form = st.selectbox(
+        'Select a form:',
+        forms
+    )
+
+    # get data
+    poke_form = df_forms[df_forms.pokemon_form_name==option_form]
+    
+    if poke_form.shape[0]==0:
+        'Form not found in data.'
+    else:
+        poke_form = poke_form.iloc[0]
+
+        form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else f'{poke.species_name} ({poke_form.form_name_text})').upper()
+
+        # description
+        if poke.forms_description:
+            '\n'
+            poke.forms_description
+
+        '\n'
+
+        # Pokémon form name
+        st.markdown(f'## {form_name}')
+        '\n'
+        
+        
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            with st.container(border=True):
+                image_url = poke_form.sprite_default
+
+                if(image_url):
+                    st.image(image_url, use_container_width=True)
+                else:
+                    'Image not found'
+
+        with col2:
+            #with st.container(border=True):
+                with st.container(border=True):
+                    f'**Form introduced in generation**: {poke_form.generation_number}'
+                
+                with st.container(border=True):
+                    # typing
+                    minicol1, minicol2, minicol3 = st.columns([1,2,2])
+                    with minicol1:
+                        '**Type:**'
+                    with minicol2:
+                        if(poke_form.first_type):
+                            st.image(f'./images/types/{poke_form.first_type}.png', use_container_width=True)
+                    with minicol3:
+                        if(poke_form.second_type):
+                            st.image(f'./images/types/{poke_form.second_type}.png', use_container_width=True)
+
+                with st.container(border=True):
+                    f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
+
+                    
+
+'\n'
+
+
+# FORMS (varieties_list)
 
 if len(poke.varieties_list)>1:
 
@@ -291,24 +378,30 @@ if len(poke.varieties_list)>1:
 
     df_varieties = load_data_varieties()
 
-    st.markdown(f'## Forms')
+    st.markdown(f'## Forms with major changes (different stats or abilities)')
 
     varieties = poke.varieties_list[1:]
     option_var = st.selectbox(
         'Select a form:',
         varieties
     )
+
+    # get data
     poke_var = df_varieties[df_varieties.pokemon_name==option_var].iloc[0]
+    poke_form = df_forms[df_forms.pokemon_name==poke_var.pokemon_name].iloc[0]
 
-    poke_var_name = poke_var.pokemon_name.upper()#.replace('-',' ')
+    form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else f'{poke_var.species_name} ({poke_form.form_name_text})').upper()
 
-    # description
-    if poke.forms_description:
-        '\n'
-        poke.forms_description
+    if not has_forms_in_list:
+        # description
+        if poke.forms_description:
+            '\n'
+            poke.forms_description
 
     '\n'
-    st.markdown(f'## {poke_var_name}')
+
+    # Pokémon form name
+    st.markdown(f'## {form_name}')
     '\n'
     
 
@@ -327,7 +420,6 @@ if len(poke.varieties_list)>1:
         #with st.container(border=True):
             with st.container(border=True):
                 f'**Form introduced in generation**: {poke_var.pokemon_generation_number}'
-                #f'**Form name:** {poke_var_name}'
             
             with st.container(border=True):
                 # typing
@@ -343,10 +435,10 @@ if len(poke.varieties_list)>1:
 
             with st.container(border=True):
                 # abilities
-                abilities = f'**Abilities:** {poke_var.first_ability.upper().replace('-',' ')}'
+                abilities = f'{poke_var.first_ability.upper().replace('-',' ')}'
                 if(poke_var.second_ability):
                     abilities += f' / {poke_var.second_ability.upper().replace('-',' ')}'
-                abilities
+                f'**Abilities:** {abilities}'
 
                 hidden_ability = poke_var.hidden_ability.upper().replace('-',' ') if poke_var.hidden_ability else 'None'
                 f'**Hidden ability:** {hidden_ability}'
@@ -369,8 +461,11 @@ if len(poke.varieties_list)>1:
                 f'**Evolutions:** {evolutions}'
 
             with st.container(border=True):
+                f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
                 f'**Is Mega-Evolved:** {get_tick_emoji(poke_var.is_mega)}'
                 f'**Is Gigantamax:** {get_tick_emoji(poke_var.is_gmax)}'
+
+            with st.container(border=True):
                 f'**Is a regional form:** {get_tick_emoji(poke_var.is_regional)}'
                 f'**Is separated from species:** {get_tick_emoji(poke_var.is_separated_from_species)}'
                 
