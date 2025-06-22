@@ -93,7 +93,7 @@ with col2:
         with st.container(border=True):
             f'**National Pokédex number**: {poke.species_id}'
             f'**Introduced in generation**: {poke.species_generation_number}'
-            default_form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else poke.pokemon_name).upper()
+            default_form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else poke.species_name).upper()
             f'**Default form name:** {default_form_name}'
         
         with st.container(border=True):
