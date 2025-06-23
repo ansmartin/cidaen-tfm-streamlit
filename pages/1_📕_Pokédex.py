@@ -392,7 +392,11 @@ if len(poke.varieties_list)>1:
     poke_var = df_varieties[df_varieties.pokemon_name==option_var].iloc[0]
     poke_form = df_forms[df_forms.pokemon_name==poke_var.pokemon_name].iloc[0]
 
-    form_name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else f'{poke_var.species_name} ({poke_form.form_name_text})').upper()
+    variety_name = (
+        poke_form.pokemon_form_name_text 
+        if poke_form.pokemon_form_name_text 
+        else f'{poke_var.species_name} ({(poke_form.form_name_text.replace('-',' ') if poke_form.form_name_text else '')})'
+    ).upper()
 
     if not has_forms_in_list:
         # description
@@ -403,7 +407,7 @@ if len(poke.varieties_list)>1:
     '\n'
 
     # Pokémon form name
-    st.markdown(f'## {form_name}')
+    st.markdown(f'## {variety_name}')
     '\n'
     
 
@@ -423,11 +427,11 @@ if len(poke.varieties_list)>1:
             with st.container(border=True):
                 f'**Form introduced in generation**: {poke_var.pokemon_generation_number}'
                 form_name = (
-                    poke_form.form_name.replace('-',' ')
+                    poke_form.form_name
                     if (poke_var.is_mega and poke_form.form_name) 
                     else (poke_form.form_name_text if poke_form.form_name_text else poke_form.form_name)
                 )
-                form_name = (form_name.upper() if form_name else '')
+                form_name = (form_name.upper().replace('-',' ') if form_name else '')
                 f'**Form name**: {form_name}'
             
             if(poke_var.is_gmax):
