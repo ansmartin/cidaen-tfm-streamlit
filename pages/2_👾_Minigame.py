@@ -53,26 +53,24 @@ with col1:
             st.image(f'./images/types/{poke.second_type}.png', use_container_width=True)
 
 
-    #st.markdown(f'#### :grey[HINT 2.] Species color {poke.color_name.upper()}')
+    st.markdown(f'#### :grey[HINT 2.] Its main color is {poke.color_name.upper()}')
 
-    st.markdown(f'#### :grey[HINT 2.] Name starts with the letter {poke.pokemon_name[0].upper()}')
+    st.markdown(f'#### :grey[HINT 3.] Name starts with the letter {poke.pokemon_name[0].upper()}')
 
-    hint4 = f'#### :grey[HINT 3.] This Pokémon was introduced in generation {poke.pokemon_generation_number}'
+    hint4 = f'#### :grey[HINT 4.] This Pokémon was introduced in generation {poke.pokemon_generation_number}'
     if not poke.is_default and poke.pokemon_generation_number>poke.species_generation_number:  
         hint4 += f', but the Pokémon species was introduced in generation {poke.species_generation_number}'
     
     st.markdown(hint4)
 
-    st.markdown(f'#### :grey[HINT 4.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
-    st.markdown(f'#### :grey[HINT 5.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
+    st.markdown(f'#### :grey[HINT 5.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
+    st.markdown(f'#### :grey[HINT 6.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
 
 
     '\n'
     '\n'
 
     if poke.is_default:
-        st.markdown(f'#### :grey[ADDITIONAL HINT.] The color of this Pokémon is {poke.color_name.upper()}')
-
         if poke.has_gender_differences:
             st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon has gender differences')
 
