@@ -304,7 +304,9 @@ if has_forms_in_list:
 
     '---'
 
-    st.markdown(f'## Forms with minor changes (visual appearance changes or different types only)')
+    st.markdown(f'## Forms with minor changes')
+    '(minor visual changes or different types only)'
+    '\n'
 
     forms = poke.forms_list[1:]
     option_form = st.selectbox(
@@ -362,6 +364,9 @@ if has_forms_in_list:
                         if(poke_form.second_type):
                             st.image(f'./images/types/{poke_form.second_type}.png', use_container_width=True)
 
+                # with st.container(border=True):
+                #     f'**Form name**: {(poke_form.form_name_text if poke_form.form_name_text else poke_form.form_name)}'
+
                 with st.container(border=True):
                     f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
 
@@ -378,7 +383,9 @@ if len(poke.varieties_list)>1:
 
     df_varieties = load_data_varieties()
 
-    st.markdown(f'## Forms with major changes (different stats or abilities)')
+    st.markdown(f'## Forms with major changes')
+    '(different stats, abilities or big visual changes)'
+    '\n'
 
     varieties = poke.varieties_list[1:]
     option_var = st.selectbox(
@@ -421,27 +428,32 @@ if len(poke.varieties_list)>1:
             with st.container(border=True):
                 f'**Form introduced in generation**: {poke_var.pokemon_generation_number}'
             
-            with st.container(border=True):
-                # typing
-                minicol1, minicol2, minicol3 = st.columns([1,2,2])
-                with minicol1:
-                    '**Type:**'
-                with minicol2:
-                    if(poke_var.first_type):
-                        st.image(f'./images/types/{poke_var.first_type}.png', use_container_width=True)
-                with minicol3:
-                    if(poke_var.second_type):
-                        st.image(f'./images/types/{poke_var.second_type}.png', use_container_width=True)
+            if(poke_var.is_gmax):
+                with st.container(border=True):
+                    'Gigantamax forms have the same types, abilities, base stats and effort values as the base Pokémon.'
 
-            with st.container(border=True):
-                # abilities
-                abilities = f'{poke_var.first_ability.upper().replace('-',' ')}'
-                if(poke_var.second_ability):
-                    abilities += f' / {poke_var.second_ability.upper().replace('-',' ')}'
-                f'**Abilities:** {abilities}'
+            else:
+                with st.container(border=True):
+                    # typing
+                    minicol1, minicol2, minicol3 = st.columns([1,2,2])
+                    with minicol1:
+                        '**Type:**'
+                    with minicol2:
+                        if(poke_var.first_type):
+                            st.image(f'./images/types/{poke_var.first_type}.png', use_container_width=True)
+                    with minicol3:
+                        if(poke_var.second_type):
+                            st.image(f'./images/types/{poke_var.second_type}.png', use_container_width=True)
 
-                hidden_ability = poke_var.hidden_ability.upper().replace('-',' ') if poke_var.hidden_ability else 'None'
-                f'**Hidden ability:** {hidden_ability}'
+                with st.container(border=True):
+                    # abilities
+                    abilities = f'{poke_var.first_ability.upper().replace('-',' ')}'
+                    if(poke_var.second_ability):
+                        abilities += f' / {poke_var.second_ability.upper().replace('-',' ')}'
+                    f'**Abilities:** {abilities}'
+
+                    hidden_ability = poke_var.hidden_ability.upper().replace('-',' ') if poke_var.hidden_ability else 'None'
+                    f'**Hidden ability:** {hidden_ability}'
 
             with st.container(border=True):
                 height = poke_var.height/10 if pd.notna(poke_var.height) else '???'
@@ -453,12 +465,15 @@ if len(poke.varieties_list)>1:
 
     with col3:
         #with st.container(border=True):
-            with st.container(border=True):
-                # evolutions
-                preevo = poke_var.evolves_from_pokemon_base_name.upper() if poke_var.evolves_from_pokemon_base_name else 'None'
-                f'**Evolves from:** {preevo}'
-                evolutions = (', '.join(poke_var.evolutions)).upper().replace("'",'') if poke_var.evolutions.size>0 else 'None'
-                f'**Evolutions:** {evolutions}'
+            if(poke_var.is_mega | poke_var.is_gmax):
+                pass
+            else:
+                with st.container(border=True):
+                    # evolutions
+                    preevo = poke_var.evolves_from_pokemon_base_name.upper() if poke_var.evolves_from_pokemon_base_name else 'None'
+                    f'**Evolves from:** {preevo}'
+                    evolutions = (', '.join(poke_var.evolutions)).upper().replace("'",'') if poke_var.evolutions.size>0 else 'None'
+                    f'**Evolutions:** {evolutions}'
 
             with st.container(border=True):
                 f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
@@ -472,46 +487,51 @@ if len(poke.varieties_list)>1:
 
     
     # -----------------------------
-    
-    col1, col2 = st.columns([2,1])
 
-    with col1:
-        # stats bar chart
+    if(poke_var.is_gmax):
         with st.container(border=True):
-            st.markdown('#### Base stats')
+            pass
 
-            stats = pd.DataFrame({
-                'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
-                'value': [poke_var.stat_hp_base, poke_var.stat_attack_base, poke_var.stat_defense_base, poke_var.stat_special_attack_base, poke_var.stat_special_defense_base, poke_var.stat_speed_base]
-            })
+    else:   
+        col1, col2 = st.columns([2,1])
 
-            chart = alt.Chart(stats).mark_bar().encode(
-                y=alt.Y('stat', sort=None),
-                x=alt.X('value', scale=alt.Scale(domain=[0, 255], clamp=True)),
-                color = combined_condition 
-            )
+        with col1:
+            # stats bar chart
+            with st.container(border=True):
+                st.markdown('#### Base stats')
 
-            st.altair_chart(chart)
+                stats = pd.DataFrame({
+                    'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
+                    'value': [poke_var.stat_hp_base, poke_var.stat_attack_base, poke_var.stat_defense_base, poke_var.stat_special_attack_base, poke_var.stat_special_defense_base, poke_var.stat_speed_base]
+                })
 
-            f'**Total stats:** {poke_var.stats_total}'
+                chart = alt.Chart(stats).mark_bar().encode(
+                    y=alt.Y('stat', sort=None),
+                    x=alt.X('value', scale=alt.Scale(domain=[0, 255], clamp=True)),
+                    color = combined_condition 
+                )
 
-    with col2:
-        with st.container(border=True):
-            st.markdown('#### EV yield')
+                st.altair_chart(chart)
 
-            effort_values = pd.DataFrame({
-                'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
-                'value': [poke_var.stat_hp_effort, poke_var.stat_attack_effort, poke_var.stat_defense_effort, poke_var.stat_special_attack_effort, poke_var.stat_special_defense_effort, poke_var.stat_speed_effort]
-            })
+                f'**Total stats:** {poke_var.stats_total}'
 
-            chart = alt.Chart(effort_values).mark_bar().encode(
-                y=alt.Y('stat', sort=None),
-                x=alt.X('value', scale=alt.Scale(domain=[0, 3], clamp=True)),
-            )
+        with col2:
+            with st.container(border=True):
+                st.markdown('#### EV yield')
 
-            st.altair_chart(chart)
+                effort_values = pd.DataFrame({
+                    'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
+                    'value': [poke_var.stat_hp_effort, poke_var.stat_attack_effort, poke_var.stat_defense_effort, poke_var.stat_special_attack_effort, poke_var.stat_special_defense_effort, poke_var.stat_speed_effort]
+                })
 
-            f'**Total effort values:** {poke_var.effort_total}'
+                chart = alt.Chart(effort_values).mark_bar().encode(
+                    y=alt.Y('stat', sort=None),
+                    x=alt.X('value', scale=alt.Scale(domain=[0, 3], clamp=True)),
+                )
+
+                st.altair_chart(chart)
+
+                f'**Total effort values:** {poke_var.effort_total}'
 
     # with col3:
     #     with st.container(border=True):
