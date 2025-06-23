@@ -157,7 +157,6 @@ with col3:
             f'**Evolutions:** {evolutions}'
 
         with st.container(border=True):
-            #f'**Category:** {poke.genus_en}'
             f'**Shape:** {poke.shape_name.upper().replace('-',' ')}'
 
         with st.container(border=True):
@@ -183,10 +182,6 @@ with col3:
             f'**Is baby:** {get_tick_emoji(poke.is_baby)}'
             f'**Is legendary:** {get_tick_emoji(poke.is_legendary)}'
             f'**Is mythical:** {get_tick_emoji(poke.is_mythical)}'
-
-        # with st.container(border=True):
-        #     f'**Is Mega-Evolved:** {get_tick_emoji(poke.is_mega)}'
-        #     f'**Is Gigantamax:** {get_tick_emoji(poke.is_gmax)}'
 
         with st.container(border=True):
             f'**Has Mega-Evolution:** {get_tick_emoji(poke.has_mega)}'
@@ -427,6 +422,13 @@ if len(poke.varieties_list)>1:
         #with st.container(border=True):
             with st.container(border=True):
                 f'**Form introduced in generation**: {poke_var.pokemon_generation_number}'
+                form_name = (
+                    poke_form.form_name.replace('-',' ')
+                    if (poke_var.is_mega and poke_form.form_name) 
+                    else (poke_form.form_name_text if poke_form.form_name_text else poke_form.form_name)
+                )
+                form_name = (form_name.upper() if form_name else '')
+                f'**Form name**: {form_name}'
             
             if(poke_var.is_gmax):
                 with st.container(border=True):
@@ -474,6 +476,16 @@ if len(poke.varieties_list)>1:
                     f'**Evolves from:** {preevo}'
                     evolutions = (', '.join(poke_var.evolutions)).upper().replace("'",'') if poke_var.evolutions.size>0 else 'None'
                     f'**Evolutions:** {evolutions}'
+
+            # color of this form
+            if(not poke_var.is_gmax):    
+                with st.container(border=True):
+                    f'**Color:** {poke.color_name.upper()}'
+                    st.write(
+                        f"""<div style="background-color: {poke.color_name}; border-radius: 10px; width: 20px; height: 20px; "> </div>""",
+                        unsafe_allow_html=True
+                    )
+                    '\n'
 
             with st.container(border=True):
                 f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
