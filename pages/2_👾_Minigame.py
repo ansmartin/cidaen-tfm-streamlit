@@ -10,7 +10,8 @@ st.set_page_config(
 
 @st.cache_data
 def load_data():
-    df = pd.read_parquet('./data/minigame.parquet')
+    df = pd.read_parquet('./data/pokemon-forms.parquet')
+    df = df[(df.is_default) | (df.is_mega) | (df.is_gmax) | (df.is_regional & ~df.is_totem)]
     return df
 
 def get_tick_emoji(condition):
@@ -25,10 +26,10 @@ def get_tick_emoji(condition):
 st.title('Guess the Pokémon!')
 
 # set random seed
-seed = st.number_input('Set the random seed', min_value=0, max_value=999999, value=0, step=1)
+seed = st.number_input('Set the random seed', min_value=0, value=0, step=1)
 random.seed(seed)
 
-'\n'
+'---'
 
 col1, col2 = st.columns(2)
 
@@ -73,6 +74,13 @@ with col1:
     if poke.is_default:
         if poke.has_gender_differences:
             st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon has gender differences')
+        if poke.has_mega:
+            st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Mega-Evolve')
+        if poke.has_gmax:
+            st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Gigantamax')
+        if poke.has_regional:
+            st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon has a regional form')
+
 
     if poke.is_baby:
         st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon is considered baby')
@@ -90,12 +98,6 @@ with col1:
     elif not poke.is_default:
         st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon is not considered the default within its own species')
 
-    if poke.has_mega:
-        st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Mega-Evolve')
-    if poke.has_gmax:
-        st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Gigantamax')
-    if poke.has_regional:
-        st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon has a regional form')
 
 
 with col2:
