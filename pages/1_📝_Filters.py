@@ -119,8 +119,7 @@ with col2:
             options = ['Any type position', 'Specify type position']
 
             option = st.selectbox(
-                #'Filter by type:',
-                '',
+                'Options',
                 options
             )
 
@@ -160,7 +159,7 @@ with col2:
             options = ['Any ability position', 'Specify ability position']
 
             option = st.selectbox(
-                '',
+                'Options',
                 options
             )
 
@@ -227,7 +226,7 @@ with col3:
             options = ['Any egg group position', 'Specify egg group position']
 
             option = st.selectbox(
-                '',
+                'Options',
                 options
             )
 
