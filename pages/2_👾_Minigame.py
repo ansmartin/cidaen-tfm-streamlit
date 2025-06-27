@@ -26,7 +26,7 @@ def get_tick_emoji(condition):
 st.title('Guess the Pokémon!')
 
 # set random seed
-seed = st.number_input('Set the random seed', min_value=0, value=0, step=1)
+seed = st.number_input('Set the random seed', min_value=0, max_value=999999999999999, value=0, step=1)
 random.seed(seed)
 
 '---'
@@ -109,7 +109,7 @@ with col2:
 
         if option==poke.pokemon_name:
             '✅ Correct answer. You are an expert!'
-            
+
             name = (poke.pokemon_form_name_text if poke.pokemon_form_name_text else poke.species_name).upper()
             f'The name of this Pokémon is {name}'
 
