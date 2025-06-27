@@ -109,7 +109,10 @@ with col2:
 
         if option==poke.pokemon_name:
             '✅ Correct answer. You are an expert!'
-            f'The name of this Pokémon is {option.upper()}'
+            
+            name = (poke.pokemon_form_name_text if poke.pokemon_form_name_text else poke.species_name).upper()
+            f'The name of this Pokémon is {name}'
+
             image_url = poke.sprite_default
             if(image_url):
                 st.image(image_url, width=300)
