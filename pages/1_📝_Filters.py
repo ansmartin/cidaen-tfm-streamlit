@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import json
 
 st.set_page_config(
     layout="wide"
@@ -9,8 +10,8 @@ st.set_page_config(
 # functions
 
 @st.cache_data
-def load_data():
-    df = pd.read_parquet('./data/pokemon-forms.parquet')
+def load_data(path):
+    df = pd.read_parquet(path)
     return df
 
 def get_tick_emoji(condition):
@@ -25,7 +26,17 @@ def get_tick_emoji(condition):
 st.title('Pokémon List')
 
 # get data
-df = load_data()
+get_data_from_aws = True
+
+if get_data_from_aws:
+    with open('data/aws.json', 'r') as file:
+        data_urls = json.load(file)
+
+    df = load_data(data_urls['forms'])
+else:
+    df = load_data('./data/pokemon-forms.parquet')
+
+
 
 # init lists
 types_list = [

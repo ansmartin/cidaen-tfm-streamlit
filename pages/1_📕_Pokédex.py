@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import json
 
 st.set_page_config(
     layout="wide"
@@ -9,13 +10,13 @@ st.set_page_config(
 # functions
 
 @st.cache_data
-def load_data_species():
-    df = pd.read_parquet('./data/pokemon-species.parquet')
+def load_data_species(path):
+    df = pd.read_parquet(path)
     return df
 
 @st.cache_data
-def load_data_forms():
-    df = pd.read_parquet('./data/pokemon-forms.parquet')
+def load_data_forms(path):
+    df = pd.read_parquet(path)
     return df
 
 def get_tick_emoji(condition):
@@ -37,8 +38,18 @@ def get_form_name(form_name_text):
 st.title('Pokédex')
 
 # get data
-df = load_data_species()
-df_forms = load_data_forms()
+get_data_from_aws = True
+
+if get_data_from_aws:
+    with open('data/aws.json', 'r') as file:
+        data_urls = json.load(file)
+
+    df = load_data_species(data_urls['species'])
+    df_forms = load_data_forms(data_urls['forms']) 
+else:
+    df = load_data_species('./data/pokemon-species.parquet')
+    df_forms = load_data_forms('./data/pokemon-forms.parquet') 
+
 
 option = st.selectbox(
     'Select a Pokémon:',

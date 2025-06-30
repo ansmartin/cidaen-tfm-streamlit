@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import json
 
 st.set_page_config(
     layout="wide"
@@ -9,8 +10,8 @@ st.set_page_config(
 # functions
 
 @st.cache_data
-def load_data():
-    df = pd.read_parquet('./data/pokemon-forms.parquet')
+def load_data(path):
+    df = pd.read_parquet(path)
     df = df[(df.is_default) | (df.is_mega) | (df.is_gmax) | (df.is_regional & ~df.is_totem)]
     return df
 
@@ -31,16 +32,24 @@ random.seed(seed)
 
 '---'
 
-col1, col2 = st.columns(2)
+# get data
+get_data_from_aws = True
 
-df = load_data()
+if get_data_from_aws:
+    with open('data/aws.json', 'r') as file:
+        data_urls = json.load(file)
 
+    df = load_data(data_urls['forms'])
+else:
+    df = load_data('./data/pokemon-forms.parquet')
+
+
+# select
 random_value = random.randint(0, df.shape[0]-1)
-
 poke = df.iloc[random_value]
 
+col1, col2 = st.columns(2)
 with col1:
-
 
     # types
     minicol1, minicol2, minicol3, minicol4  = st.columns([1,1,1,1])
