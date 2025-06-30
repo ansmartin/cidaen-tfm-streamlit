@@ -33,7 +33,7 @@ random.seed(seed)
 '---'
 
 # get data
-get_data_from_aws = True
+get_data_from_aws = False
 
 if get_data_from_aws:
     with open('data/aws.json', 'r') as file:
@@ -73,8 +73,9 @@ with col1:
     
     st.markdown(hint4)
 
-    st.markdown(f'#### :grey[HINT 5.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
-    st.markdown(f'#### :grey[HINT 6.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
+    if not poke.is_mega and not poke.is_gmax:
+        st.markdown(f'#### :grey[HINT 5.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
+        st.markdown(f'#### :grey[HINT 6.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
 
 
     '\n'

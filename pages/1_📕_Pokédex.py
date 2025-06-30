@@ -38,7 +38,7 @@ def get_form_name(form_name_text):
 st.title('Pokédex')
 
 # get data
-get_data_from_aws = True
+get_data_from_aws = False
 
 if get_data_from_aws:
     with open('data/aws.json', 'r') as file:

@@ -26,7 +26,7 @@ def get_tick_emoji(condition):
 st.title('Pokémon List')
 
 # get data
-get_data_from_aws = True
+get_data_from_aws = False
 
 if get_data_from_aws:
     with open('data/aws.json', 'r') as file:
