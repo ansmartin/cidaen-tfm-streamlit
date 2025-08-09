@@ -1,6 +1,6 @@
 # Caso práctico end-to-end: extracción de datos de la API de PokéAPI, procesamiento con ETLs y despliegue interactivo en la nube con Streamlit
 
-Trabajo de Fin de Máster del curso CIDAEN 2024/2025 (máster de Formación Permanente en Ciencia de Datos e Ingeniería de Datos en la Nube de la UCLM).
+Trabajo de Fin de Máster del curso CIDAEN 2024/2025 (Máster de Formación Permanente en Ciencia de Datos e Ingeniería de Datos en la Nube de la UCLM).
 
 **Autor**: Anselmo Martínez Martínez
 
@@ -16,6 +16,12 @@ Contiene tres páginas:
 * “Minigame”: un pequeño juego de adivinar el nombre de un Pokémon específico a partir de una serie de pistas sobre sus datos. Se ha creado con la intención de poner en práctica los conocimientos adquiridos a partir de observar los datos de cada Pokémon y ofrecer un pasatiempo divertido.
 
 La aplicación se encuentra desplegada en los servidores de la plataforma de Streamlit Community Cloud, donde puede ser accedida mediante el siguiente enlace: https://cidaen-tfm-pokeapi-app.streamlit.app/
+
+---
+
+## Imagen de la aplicación
+
+<img width="1501" height="874" alt="paginapokedex0" src="https://github.com/user-attachments/assets/5074ce6a-5297-43ef-be0b-0c5185689600" />
 
 ---
 
