@@ -19,12 +19,6 @@ La aplicación se encuentra desplegada en los servidores de la plataforma de Str
 
 ---
 
-## Imagen de la aplicación
-
-<img width="1501" height="874" alt="paginapokedex0" src="https://github.com/user-attachments/assets/5074ce6a-5297-43ef-be0b-0c5185689600" />
-
----
-
 ## Cómo iniciar la aplicación en tu propia máquina
 
 1. Instalar las dependencias incluidas en el fichero requirements:
@@ -38,3 +32,9 @@ La aplicación se encuentra desplegada en los servidores de la plataforma de Str
    ```
    $ streamlit run Main.py
    ```
+
+---
+
+## Imagen de la aplicación
+
+<img width="1501" height="874" alt="paginapokedex0" src="https://github.com/user-attachments/assets/5074ce6a-5297-43ef-be0b-0c5185689600" />
