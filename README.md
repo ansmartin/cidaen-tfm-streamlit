@@ -15,6 +15,10 @@ Contiene tres páginas:
 * “Filters”: una serie de filtros que se pueden activar o desactivar para realizar consultas a los conjuntos de datos que hemos preparado. Se ha creado con la intención de que cualquier persona pueda hacer consultas y pueda ver los datos de las filas seleccionadas de una manera sencilla sin necesidad de tener conocimientos informáticos sobre lenguajes de consultas.
 * “Minigame”: un pequeño juego de adivinar el nombre de un Pokémon específico a partir de una serie de pistas sobre sus datos. Se ha creado con la intención de poner en práctica los conocimientos adquiridos a partir de observar los datos de cada Pokémon y ofrecer un pasatiempo divertido.
 
+---
+
+## Acceder a la aplicación desplegada en la nube
+
 La aplicación se encuentra desplegada en los servidores de la plataforma de Streamlit Community Cloud, donde puede ser accedida mediante el siguiente enlace: https://cidaen-tfm-pokeapi-app.streamlit.app/
 
 ---
