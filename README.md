@@ -46,16 +46,28 @@ La aplicación se encuentra desplegada en los servidores de la plataforma de Str
 
 ## Cómo iniciar la aplicación en tu propia máquina
 
-1. Instalar las dependencias incluidas en el fichero requirements:
+1. Crear entorno virtual (recomendado)
+
+	```
+	python -m venv venv
+	```
+
+2. Activar entorno virtual (recomendado)
+
+	```
+	.\venv\Scripts\activate
+	```
+
+3. Instalar dependencias:
 
    ```
-   $ pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
 
-2. Iniciar el archivo principal de la aplicación con Streamlit:
+4. Iniciar el archivo principal de la aplicación con Streamlit:
 
    ```
-   $ streamlit run Main.py
+   streamlit run Main.py
    ```
 
 ---
