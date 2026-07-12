@@ -37,6 +37,7 @@ def get_form_name(form_name_text):
 
 st.title('Pokédex')
 
+'---'
 # get data
 get_data_from_aws = False
 
@@ -51,9 +52,32 @@ else:
     df_forms = load_data_forms('./data/pokemon-forms.parquet') 
 
 
+
+if "selection" not in st.session_state:
+    st.session_state.selection = df.iloc[0].species_name
+
+left, right = st.columns(2)
+if left.button("Previous"):
+    poke_id = df[df.species_name==st.session_state.selection].iloc[0].species_id 
+    poke_id-=1
+    if poke_id>0:
+        option = df[df.species_id==poke_id].iloc[0].species_name
+        st.session_state.selection = option
+        st.rerun()
+        
+if right.button("Next"):
+    poke_id = df[df.species_name==st.session_state.selection].iloc[0].species_id 
+    poke_id+=1
+    if poke_id<=df.shape[0]:
+        option = df[df.species_id==poke_id].iloc[0].species_name
+        st.session_state.selection = option
+        st.rerun()
+
+
 option = st.selectbox(
     'Select a Pokémon:',
-    df.species_name
+    df.species_name,
+    key="selection"
 )
 
 poke = df[df.species_name==option].iloc[0]
