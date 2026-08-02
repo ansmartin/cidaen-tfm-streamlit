@@ -223,7 +223,9 @@ with col3:
         with st.container(border=True):
             f'**Is baby:** {get_tick_emoji(poke.is_baby)}'
             f'**Is legendary:** {get_tick_emoji(poke.is_legendary)}'
+            f'**Is sub-legendary:** {get_tick_emoji(poke.is_sublegendary)}'
             f'**Is mythical:** {get_tick_emoji(poke.is_mythical)}'
+            f'**Is powerhouse:** {get_tick_emoji(poke.is_powerhouse)}'
 
         with st.container(border=True):
             f'**Has Mega-Evolution:** {get_tick_emoji(poke.has_mega)}'
@@ -403,7 +405,10 @@ if has_forms:
 
             with st.container(border=True):
                 # abilities
-                abilities = f'{poke_form.first_ability.upper().replace('-',' ')}'
+                if poke_form.first_ability:
+                    abilities = f'{poke_form.first_ability.upper().replace('-',' ')}'
+                else:
+                    abilities = ''
                 if(poke_form.second_ability):
                     abilities += f' / {poke_form.second_ability.upper().replace('-',' ')}'
                 f'**Abilities:** {abilities}'
@@ -440,16 +445,18 @@ if has_forms:
                     f'**Evolutions:** {evolutions}'
 
             # color of this form 
-            with st.container(border=True):
-                f'**Color:** {poke_form.color_name.upper()}'
-                st.write(
-                    f"""<div style="background-color: {poke_form.color_name}; border-radius: 10px; width: 20px; height: 20px; "> </div>""",
-                    unsafe_allow_html=True
-                )
-                '\n'
+            # with st.container(border=True):
+            #     f'**Color:** {poke_form.color_name.upper()}'
+            #     st.write(
+            #         f"""<div style="background-color: {poke_form.color_name}; border-radius: 10px; width: 20px; height: 20px; "> </div>""",
+            #         unsafe_allow_html=True
+            #     )
+            #     '\n'
 
             with st.container(border=True):
                 f'**Is a battle-only form:** {get_tick_emoji(poke_form.is_battle_only)}'
+
+            with st.container(border=True):
                 f'**Is Mega-Evolved:** {get_tick_emoji(poke_form.is_mega)}'
                 f'**Is Gigantamax:** {get_tick_emoji(poke_form.is_gmax)}'
 

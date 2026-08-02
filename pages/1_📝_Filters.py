@@ -105,7 +105,9 @@ with col1:
         'Select only:'
         baby = st.checkbox("Baby", value=False)
         legendary = st.checkbox("Legendary", value=False)
+        sublegendary = st.checkbox("Sub-legendary", value=False)
         mythical = st.checkbox("Mythical", value=False)
+        powerhouse = st.checkbox("Powerhouse", value=False)
         totem = st.checkbox("Totem", value=False)
         #battle = st.checkbox("Battle-only forms", value=False)
         
@@ -113,8 +115,12 @@ with col1:
             df = df[df.is_baby]
         if legendary:
             df = df[df.is_legendary]
+        if sublegendary:
+            df = df[df.is_sublegendary]
         if mythical:
             df = df[df.is_mythical]
+        if powerhouse:
+            df = df[df.is_powerhouse]
         if totem:
             df = df[df.is_totem]
         # if battle:
@@ -289,9 +295,9 @@ with col3:
         if len(shapes_selected)>0:
             df = df[df.shape_name.isin(shapes_selected)]
 
-        colors_selected = st.multiselect("Filter by color", colors_list)
-        if len(colors_selected)>0:
-            df = df[df.color_name.isin(colors_selected)]
+        # colors_selected = st.multiselect("Filter by color", colors_list)
+        # if len(colors_selected)>0:
+        #     df = df[df.color_name.isin(colors_selected)]
 
     with st.container(border=True):
         options = ['None','Select Pokémon without pre-evolution', 'Select Pokémon with pre-evolution']
