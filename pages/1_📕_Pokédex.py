@@ -86,7 +86,7 @@ forms = df_forms[df_forms.species_name==option]
 # default form
 poke_form = forms[forms.is_default].iloc[0]
 
-species_name = option.upper()
+species_name = poke.species_name_en
 
 
 
@@ -367,7 +367,7 @@ if has_forms:
     #     if poke_form.pokemon_form_name_text 
     #     else f'{poke_form.species_name} ({(poke_form.form_name_text.replace('-',' ') if poke_form.form_name_text else '')})'
     # ).upper()
-    name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else poke_form.species_name).upper()
+    name = (poke_form.pokemon_form_name_text if poke_form.pokemon_form_name_text else poke.species_name_en)
 
     # Pokémon form name
     st.markdown(f'## {name}')
