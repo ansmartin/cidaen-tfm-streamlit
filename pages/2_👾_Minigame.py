@@ -87,12 +87,8 @@ with col1:
             st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Mega-Evolve')
         if poke.has_gmax:
             st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon can Gigantamax')
-        if poke.has_regional:
-            st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon has a regional form')
 
 
-    if poke.is_baby:
-        st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon is considered baby')
     if poke.is_legendary:
         st.markdown(f'#### :grey[ADDITIONAL HINT.] This Pokémon is considered legendary')
     if poke.is_sublegendary:

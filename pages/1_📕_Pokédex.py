@@ -104,7 +104,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     with st.container(border=True):
-        image_url = poke.sprite_default
+        image_url = poke_form.sprite_default
 
         if(image_url):
             st.image(image_url, use_container_width=True)
@@ -139,27 +139,27 @@ with col2:
             with minicol1:
                 '**Type:**'
             with minicol2:
-                if(poke.first_type):
-                    st.image(f'./images/types/{poke.first_type}.png', use_container_width=True)
+                if(poke_form.first_type):
+                    st.image(f'./images/types/{poke_form.first_type}.png', use_container_width=True)
             with minicol3:
-                if(poke.second_type):
-                    st.image(f'./images/types/{poke.second_type}.png', use_container_width=True)
+                if(poke_form.second_type):
+                    st.image(f'./images/types/{poke_form.second_type}.png', use_container_width=True)
 
         with st.container(border=True):
             # abilities
-            abilities = f'{poke.first_ability.upper().replace('-',' ')}'
-            if(poke.second_ability):
-                abilities += f' / {poke.second_ability.upper().replace('-',' ')}'
+            abilities = f'{poke_form.first_ability.upper().replace('-',' ')}'
+            if(poke_form.second_ability):
+                abilities += f' / {poke_form.second_ability.upper().replace('-',' ')}'
             f'**Abilities:** {abilities}'
 
-            hidden_ability = poke.hidden_ability.upper().replace('-',' ') if poke.hidden_ability else 'None'
+            hidden_ability = poke_form.hidden_ability.upper().replace('-',' ') if poke_form.hidden_ability else 'None'
             f'**Hidden ability:** {hidden_ability}'
 
         with st.container(border=True):
-            height = poke.height/10 if pd.notna(poke.height) else '???'
+            height = poke_form.height/10 if pd.notna(poke_form.height) else '???'
             f'**Height:** {height} m'
 
-            weight = poke.weight/10 if pd.notna(poke.weight) else '???'
+            weight = poke_form.weight/10 if pd.notna(poke_form.weight) else '???'
             f'**Weight:** {weight} kg'
 
         with st.container(border=True):
@@ -179,7 +179,7 @@ with col2:
             
         with st.container(border=True):
             # experience
-            f'**Base experience yield:** {poke.base_experience}'
+            f'**Base experience yield:** {poke_form.base_experience}'
             f'**Leveling rate:** {poke.growth_rate_name.upper().replace('-',' ')}'
 
         with st.container(border=True):
@@ -193,9 +193,9 @@ with col3:
     #with st.container(border=True):
         with st.container(border=True):
             # evolutions
-            preevo = poke.evolves_from_pokemon_base_name.upper() if poke.evolves_from_pokemon_base_name else 'None'
+            preevo = poke_form.evolves_from_pokemon_base_name.upper() if poke_form.evolves_from_pokemon_base_name else 'None'
             f'**Evolves from:** {preevo}'
-            evolutions = (', '.join(poke.evolutions)).upper().replace("'",'') if poke.evolutions.size>0 else 'None'
+            evolutions = (', '.join(poke_form.evolutions)).upper().replace("'",'') if poke_form.evolutions.size>0 else 'None'
             f'**Evolutions:** {evolutions}'
 
         with st.container(border=True):
@@ -280,7 +280,7 @@ with col1:
 
         stats = pd.DataFrame({
             'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
-            'value': [poke.stat_hp_base, poke.stat_attack_base, poke.stat_defense_base, poke.stat_special_attack_base, poke.stat_special_defense_base, poke.stat_speed_base]
+            'value': [poke_form.stat_hp_base, poke_form.stat_attack_base, poke_form.stat_defense_base, poke_form.stat_special_attack_base, poke_form.stat_special_defense_base, poke_form.stat_speed_base]
         })
 
         # colors
@@ -305,7 +305,7 @@ with col1:
 
         st.altair_chart(chart)
 
-        f'**Total stats:** {poke.stats_total}'
+        f'**Total stats:** {poke_form.stats_total}'
 
 with col2:
     with st.container(border=True):
@@ -313,7 +313,7 @@ with col2:
 
         effort_values = pd.DataFrame({
             'stat': ['HP','Attack','Defense','SpecialAttack','SpecialDefense','Speed'],
-            'value': [poke.stat_hp_effort, poke.stat_attack_effort, poke.stat_defense_effort, poke.stat_special_attack_effort, poke.stat_special_defense_effort, poke.stat_speed_effort]
+            'value': [poke_form.stat_hp_effort, poke_form.stat_attack_effort, poke_form.stat_defense_effort, poke_form.stat_special_attack_effort, poke_form.stat_special_defense_effort, poke_form.stat_speed_effort]
         })
 
         chart = alt.Chart(effort_values).mark_bar().encode(
@@ -323,7 +323,7 @@ with col2:
 
         st.altair_chart(chart)
 
-        f'**Total effort values:** {poke.effort_total}'
+        f'**Total effort values:** {poke_form.effort_total}'
 
 # with col3:
 #     with st.container(border=True):
