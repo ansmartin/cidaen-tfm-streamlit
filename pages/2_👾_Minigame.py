@@ -10,9 +10,14 @@ st.set_page_config(
 # functions
 
 @st.cache_data
-def load_data(path):
+def load_data_forms(path):
     df = pd.read_parquet(path)
     df = df[(df.is_default) | (df.is_mega) | (df.is_gmax) | (df.is_regional & ~df.is_totem)]
+    return df
+
+@st.cache_data
+def load_data_species(path):
+    df = pd.read_parquet(path)
     return df
 
 def get_tick_emoji(condition):
@@ -39,14 +44,17 @@ if get_data_from_aws:
     with open('data/aws.json', 'r') as file:
         data_urls = json.load(file)
 
-    df = load_data(data_urls['forms'])
+    df_forms = load_data_forms(data_urls['forms'])
+    df_species = load_data_species(data_urls['species'])
 else:
-    df = load_data('./data/pokemon-forms.parquet')
+    df_forms = load_data_forms('./data/pokemon-forms.parquet')
+    df_species = load_data_species('./data/pokemon-species.parquet')
 
 
 # select
-random_value = random.randint(0, df.shape[0]-1)
-poke = df.iloc[random_value]
+random_value = random.randint(0, df_forms.shape[0]-1)
+poke = df_forms.iloc[random_value]
+species = df_species.loc[poke.species_id]
 
 col1, col2 = st.columns(2)
 with col1:
@@ -64,17 +72,17 @@ with col1:
 
     st.markdown(f'#### :grey[HINT 2.] Name starts with the letter {poke.pokemon_name[0].upper()}')
 
-    #st.markdown(f'#### :grey[HINT 3.] Its shape is {poke.shape_name.upper()}')
+    st.markdown(f'#### :grey[HINT 3.] Its shape is {species.shape_name.upper()}')
 
-    hint4 = f'#### :grey[HINT 3.] This Pokémon was introduced in generation {poke.form_generation_number}'
-    if not poke.is_default and poke.form_generation_number>poke.species_generation_number:  
-        hint4 += f', but the Pokémon species was introduced in generation {poke.species_generation_number}'
+    hint4 = f'#### :grey[HINT 4.] This Pokémon was introduced in generation {poke.form_generation_number}'
+    if not poke.is_default and poke.form_generation_number>species.species_generation_number:  
+        hint4 += f', but the Pokémon species was introduced in generation {species.species_generation_number}'
     
     st.markdown(hint4)
 
     if not poke.is_mega and not poke.is_gmax:
-        st.markdown(f'#### :grey[HINT 4.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
-        st.markdown(f'#### :grey[HINT 5.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
+        st.markdown(f'#### :grey[HINT 5.] Has pre-evolution: {get_tick_emoji(poke.evolves_from_pokemon_base_name!=None)}')
+        st.markdown(f'#### :grey[HINT 6.] Has evolution: {get_tick_emoji(poke.evolutions.size>0)}')
 
 
     '\n'
@@ -113,7 +121,7 @@ with col2:
     with st.container(border=True):
         option = st.selectbox(
             'Select the name of this Pokémon:',
-            df.pokemon_name
+            df_forms.pokemon_name
         )
 
         if option==poke.pokemon_name:
